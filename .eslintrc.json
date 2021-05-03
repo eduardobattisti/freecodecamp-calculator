@@ -19,8 +19,9 @@
     ],
     "rules": {
         "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
-        "react/jsx-indent": [2 , "tab"],
+        "react/jsx-indent": [2 , "tab"],		
         "indent": ["error", "tab"],
+		"linebreak-style": 0,
         "no-tabs": 0,
         "global-require": "off",
         "import/prefer-default-export": "off",

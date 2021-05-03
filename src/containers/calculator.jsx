@@ -10,7 +10,7 @@ const Calculator = () => {
 	const numberButtons = [];
 
 	for (let i = 0; i < 10; i += 1) {
-		numberButtons.push(<Button id={i} value={i} className={i === 0 ? 'horizontalButton' : 'defaultButton'} />);
+		numberButtons.push(<Button id={`${i}`} value={`${i}`} className={i === 0 ? 'horizontalButton' : 'defaultButton'} />);
 		if (i === 3) {
 			numberButtons.push(<Button id="subtraction" value="-" className="defaultButton" />);
 		} else if (i === 6) {

@@ -1,32 +1,70 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { evaluate } from 'mathjs';
 
 import './style.scss';
 
 // import propTypes from 'prop-types';
 
-import { Button } from '../components';
+import { Button, CalcScreen } from '../components';
 
 const Calculator = () => {
 	const numberButtons = [];
 
+	const [input, setInput] = useState('0');
+	const [resolve, setResolve] = useState('');
+
+	const onNumberClick = (event) => {
+		const { target } = event;
+		const operations = ['-', '+', 'X', '/'];
+
+		if (operations.includes(target.value)) {
+			setInput(target.innerText);
+		} else if (!Number.isNaN(Number(target.value))) {
+			setInput(input + target.innerText);
+		} else {
+			setInput(input + target.innerText);
+		}
+	};
+
+	const onClear = () => {
+		setInput('0');
+		setResolve('');
+	};
+
+	const onEval = () => {
+		const evaluation = resolve.replace('X', '*');
+		setResolve(evaluate(evaluation));
+		setInput('');
+	};
+
+	useEffect(() => {
+		if (!(input.length === 1 && input === '0')) {
+			setResolve(resolve + input);
+		}
+	}, [input]);
+
 	for (let i = 0; i < 10; i += 1) {
-		numberButtons.push(<Button id={`${i}`} value={`${i}`} className={i === 0 ? 'horizontalButton' : 'defaultButton'} />);
+		numberButtons.push(<Button key={`button-${i}`} id={`${i}`} value={`${i}`} onClick={onNumberClick} className={i === 0 ? 'horizontalButton' : 'defaultButton'} />);
 		if (i === 3) {
-			numberButtons.push(<Button id="subtraction" value="-" className="defaultButton" />);
+			numberButtons.push(<Button key="button-sub" id="subtract" value="-" onClick={onNumberClick} className="defaultButton" />);
 		} else if (i === 6) {
-			numberButtons.push(<Button id="addition" value="+" className="defaultButton" />);
+			numberButtons.push(<Button key="button-add" id="add" value="+" onClick={onNumberClick} className="defaultButton" />);
 		} else if (i === 9) {
-			numberButtons.push(<Button id="equal" value="=" className="verticalButton" />);
+			numberButtons.push(<Button key="button-equal" id="equals" value="=" onClick={onEval} className="verticalButton" />);
 		}
 	}
 
 	return (
 		<div className="calculator">
-			<Button id="clear" value="AC" className="horizontalButton" />
-			<Button id="divide" value="/" className="defaultButton" />
-			<Button id="multiply" value="X" className="defaultButton" />
-			{numberButtons}
-			<Button id="decimal" value="." className="defaultButton" />
+			<CalcScreen value={resolve} className="result" />
+			<CalcScreen id="display" value={input} className="formula" />
+			<div className="buttons">
+				<Button id="clear" value="AC" onClick={onClear} className="horizontalButton" />
+				<Button id="divide" value="/" onClick={onNumberClick} className="defaultButton" />
+				<Button id="multiply" value="X" onClick={onNumberClick} className="defaultButton" />
+				{numberButtons}
+				<Button id="decimal" value="." onClick={onNumberClick} className="defaultButton" />
+			</div>
 		</div>
 	);
 };

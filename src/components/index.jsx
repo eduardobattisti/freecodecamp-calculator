@@ -1,9 +1,7 @@
 import Button from './Button';
-import Formula from './Formula';
-import OutputScreen from './OutputScreen';
+import CalcScreen from './CalcScreen';
 
 export {
 	Button,
-	Formula,
-	OutputScreen,
+	CalcScreen,
 };

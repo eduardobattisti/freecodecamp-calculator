@@ -17,11 +17,11 @@ const Calculator = () => {
 		const { target } = event;
 		const operations = ['-', '+', 'X', '/'];
 
-		if (operations.includes(target.value)) {
+		if (operations.includes(target.innerText)) {
 			setInput(target.innerText);
-		} else if (!Number.isNaN(Number(target.value))) {
-			setInput(input + target.innerText);
-		} else {
+		} else if (input === '0' && input.length === 1) {
+			setInput(target.innerText);
+		} else if (!operations.includes(target.innerText)) {
 			setInput(input + target.innerText);
 		}
 	};
@@ -32,14 +32,17 @@ const Calculator = () => {
 	};
 
 	const onEval = () => {
-		const evaluation = resolve.replace('X', '*');
-		setResolve(evaluate(evaluation));
-		setInput('');
+		const evaluation = evaluate(resolve.replace('X', '*'));
+
+		setResolve(`${resolve}=${evaluation}`);
+		console.log(resolve, input);
+		setInput(`${evaluation}`);
+		console.log(resolve, input);
 	};
 
 	useEffect(() => {
 		if (!(input.length === 1 && input === '0')) {
-			setResolve(resolve + input);
+			setResolve(resolve + input[input.length - 1]);
 		}
 	}, [input]);
 

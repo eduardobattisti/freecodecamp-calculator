@@ -19,13 +19,10 @@ const Calculator = () => {
 
 		const dotsInput = input.replace(/[^.]/g, '').length;
 
-<<<<<<< HEAD
 		if (resolve.indexOf('=') > -1) {
 			return;
 		}
 
-=======
->>>>>>> 531da171a33fdacf032af03f96047e03b80faa56
 		if (input === '0' && input.length === 1) {
 			setInput(target.innerText);
 			return;
@@ -54,7 +51,6 @@ const Calculator = () => {
 			return;
 		}
 
-<<<<<<< HEAD
 		if (resolve.indexOf('=') > -1) {
 			return;
 		}
@@ -63,13 +59,6 @@ const Calculator = () => {
 			const equalIndex = resolve.indexOf('=') + 1 + 1;
 			const expressionRest = resolve.length;
 			const expressionTotal = resolve.slice(equalIndex, expressionRest);
-=======
-		if (isEvaluate) {
-			const equalIndex = resolve.indexOf('=') + 1;
-			const expressionRest = resolve.length;
-			const expressionTotal = resolve.slice(equalIndex, expressionRest);
-			console.log(expressionTotal);
->>>>>>> 531da171a33fdacf032af03f96047e03b80faa56
 			setResolve(expressionTotal);
 			setInput('');
 			return;
@@ -86,19 +75,12 @@ const Calculator = () => {
 
 		setInput(`${evaluation}`);
 		setEvaluate(true);
-<<<<<<< HEAD
-=======
-		console.log(isEvaluate);
->>>>>>> 531da171a33fdacf032af03f96047e03b80faa56
 	};
 
 	useEffect(() => {
 		if (isEvaluate) {
 			setResolve(`${resolve}=${input}`);
-<<<<<<< HEAD
 			setEvaluate(false);
-=======
->>>>>>> 531da171a33fdacf032af03f96047e03b80faa56
 			return;
 		}
 

@@ -9,6 +9,18 @@ import { Button, CalcScreen } from '../components';
 
 const Calculator = () => {
 	const numberButtons = [];
+	const numbers = {
+		0: 'zero',
+		1: 'one',
+		2: 'two',
+		3: 'three',
+		4: 'four',
+		5: 'five',
+		6: 'six',
+		7: 'seven',
+		8: 'eight',
+		9: 'nine',
+	};
 
 	const [input, setInput] = useState('0');
 	const [resolve, setResolve] = useState('');
@@ -19,7 +31,12 @@ const Calculator = () => {
 
 		const dotsInput = input.replace(/[^.]/g, '').length;
 
-		if (resolve.indexOf('=') > -1) {
+		if (resolve.indexOf('=') > -1 && (Number.isNaN(Number(target.innerText)) && target.innerText !== '.')) {
+			const equalIndex = resolve.indexOf('=') + 1;
+			const expressionRest = resolve.length;
+			const expressionTotal = resolve.slice(equalIndex, expressionRest);
+			setResolve(expressionTotal);
+			setInput(target.innerText);
 			return;
 		}
 
@@ -71,10 +88,14 @@ const Calculator = () => {
 			return;
 		}
 
-		const evaluation = evaluate(resolve.replace('X', '*'));
-
-		setInput(`${evaluation}`);
-		setEvaluate(true);
+		try {
+			const evaluation = evaluate(resolve.replace('X', '*'));
+			setInput(`${evaluation}`);
+			setEvaluate(true);
+		} catch (err) {
+			setResolve('');
+			setInput('0');
+		}
 	};
 
 	useEffect(() => {
@@ -90,7 +111,7 @@ const Calculator = () => {
 	}, [input]);
 
 	for (let i = 0; i < 10; i += 1) {
-		numberButtons.push(<Button key={`button-${i}`} id={`${i}`} value={`${i}`} onClick={onNumberClick} className={i === 0 ? 'horizontalButton' : 'defaultButton'} />);
+		numberButtons.push(<Button key={`button-${i}`} id={`${numbers[i]}`} value={`${i}`} onClick={onNumberClick} className={i === 0 ? 'horizontalButton' : 'defaultButton'} />);
 		if (i === 3) {
 			numberButtons.push(<Button key="button-sub" id="subtract" value="-" onClick={onNumberClick} className="defaultButton" />);
 		} else if (i === 6) {

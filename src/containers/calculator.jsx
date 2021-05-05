@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { evaluate } from 'mathjs';
 
 import './style.scss';
@@ -12,17 +12,26 @@ const Calculator = () => {
 
 	const [input, setInput] = useState('0');
 	const [resolve, setResolve] = useState('');
+	const [isEvaluate, setEvaluate] = useState(false);
 
 	const onNumberClick = (event) => {
 		const { target } = event;
-		const operations = ['-', '+', 'X', '/'];
 
-		if (operations.includes(target.innerText)) {
+		const dotsInput = input.replace(/[^.]/g, '').length;
+
+		if (input === '0' && input.length === 1) {
 			setInput(target.innerText);
-		} else if (input === '0' && input.length === 1) {
-			setInput(target.innerText);
-		} else if (!operations.includes(target.innerText)) {
+			return;
+		}
+
+		if (dotsInput === 1 && target.innerText === '.') {
+			return;
+		}
+
+		if (!Number.isNaN(Number(input))) {
 			setInput(input + target.innerText);
+		} else {
+			setInput(target.innerText);
 		}
 	};
 
@@ -32,15 +41,42 @@ const Calculator = () => {
 	};
 
 	const onEval = () => {
+		const operations = ['X', '/', '+', '-'];
+
+		if (!resolve) {
+			return;
+		}
+
+		if (isEvaluate) {
+			const equalIndex = resolve.indexOf('=') + 1;
+			const expressionRest = resolve.length;
+			const expressionTotal = resolve.slice(equalIndex, expressionRest);
+			console.log(expressionTotal);
+			setResolve(expressionTotal);
+			setInput('');
+			return;
+		}
+
+		if (operations.includes(resolve[resolve.length - 1])) {
+			const resolveEnd = resolve.slice(0, resolve.length - 1);
+			setInput(resolveEnd);
+			setEvaluate(true);
+			return;
+		}
+
 		const evaluation = evaluate(resolve.replace('X', '*'));
 
-		setResolve(`${resolve}=${evaluation}`);
-		console.log(resolve, input);
 		setInput(`${evaluation}`);
-		console.log(resolve, input);
+		setEvaluate(true);
+		console.log(isEvaluate);
 	};
 
 	useEffect(() => {
+		if (isEvaluate) {
+			setResolve(`${resolve}=${input}`);
+			return;
+		}
+
 		if (!(input.length === 1 && input === '0')) {
 			setResolve(resolve + input[input.length - 1]);
 		}

@@ -21,16 +21,13 @@ const Calculator = () => {
 		const dotsInput = input.replace(/[^.]/g, '').length;
 		const lastSign = operations.map((elem) => resolve.lastIndexOf(elem)).sort((a, b) => a - b);
 
-		if (input.length > 20) {
-			const actualInput = input;
-
+		if (input.length > 17 || input === 'Digit Limit Met') {
 			setLimit(true);
-			setInput('Digite Limit Met');
+			setInput('Digit Limit Met');
 
 			setTimeout(() => {
-				setInput(actualInput);
-				setResolve(actualInput);
-			}, 500);
+				setInput(resolve);
+			}, 1500);
 			return;
 		}
 
@@ -72,6 +69,7 @@ const Calculator = () => {
 	const onClear = () => {
 		setInput('0');
 		setResolve('');
+		setLimit(false);
 	};
 
 	const onEval = () => {

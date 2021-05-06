@@ -9,6 +9,7 @@ import { Button, CalcScreen } from '../components';
 
 const Calculator = () => {
 	const numberButtons = [];
+	const operations = ['X', '/', '+', '-'];
 	const numbers = {
 		0: 'zero',
 		1: 'one',
@@ -30,6 +31,17 @@ const Calculator = () => {
 		const { target } = event;
 
 		const dotsInput = input.replace(/[^.]/g, '').length;
+		const lastSign = operations.map((elem) => resolve.lastIndexOf(elem)).sort((a, b) => a - b);
+
+		if (
+			operations.includes(resolve[resolve.length - 1])
+			&& operations.includes(target.innerText)
+			&& target.innerText !== '-'
+		) {
+			const partialResolve = resolve.slice(0, lastSign[lastSign.length - 2]);
+			setResolve(partialResolve + target.innerText);
+			return;
+		}
 
 		if (resolve.indexOf('=') > -1 && (Number.isNaN(Number(target.innerText)) && target.innerText !== '.')) {
 			const equalIndex = resolve.indexOf('=') + 1;
@@ -62,8 +74,6 @@ const Calculator = () => {
 	};
 
 	const onEval = () => {
-		const operations = ['X', '/', '+', '-'];
-
 		if (!resolve) {
 			return;
 		}

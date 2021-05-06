@@ -8,23 +8,11 @@ import './style.scss';
 import { Button, CalcScreen } from '../components';
 
 const Calculator = () => {
-	const numberButtons = [];
 	const operations = ['X', '/', '+', '-'];
-	const numbers = {
-		0: 'zero',
-		1: 'one',
-		2: 'two',
-		3: 'three',
-		4: 'four',
-		5: 'five',
-		6: 'six',
-		7: 'seven',
-		8: 'eight',
-		9: 'nine',
-	};
 
 	const [input, setInput] = useState('0');
 	const [resolve, setResolve] = useState('');
+	const [isLimit, setLimit] = useState(false);
 	const [isEvaluate, setEvaluate] = useState(false);
 
 	const onNumberClick = (event) => {
@@ -32,6 +20,19 @@ const Calculator = () => {
 
 		const dotsInput = input.replace(/[^.]/g, '').length;
 		const lastSign = operations.map((elem) => resolve.lastIndexOf(elem)).sort((a, b) => a - b);
+
+		if (input.length > 20) {
+			const actualInput = input;
+
+			setLimit(true);
+			setInput('Digite Limit Met');
+
+			setTimeout(() => {
+				setInput(actualInput);
+				setResolve(actualInput);
+			}, 500);
+			return;
+		}
 
 		if (
 			operations.includes(resolve[resolve.length - 1])
@@ -109,6 +110,10 @@ const Calculator = () => {
 	};
 
 	useEffect(() => {
+		if (isLimit) {
+			return;
+		}
+
 		if (isEvaluate) {
 			setResolve(`${resolve}=${input}`);
 			setEvaluate(false);
@@ -120,17 +125,6 @@ const Calculator = () => {
 		}
 	}, [input]);
 
-	for (let i = 0; i < 10; i += 1) {
-		numberButtons.push(<Button key={`button-${i}`} id={`${numbers[i]}`} value={`${i}`} onClick={onNumberClick} className={i === 0 ? 'horizontalButton' : 'defaultButton'} />);
-		if (i === 3) {
-			numberButtons.push(<Button key="button-sub" id="subtract" value="-" onClick={onNumberClick} className="defaultButton" />);
-		} else if (i === 6) {
-			numberButtons.push(<Button key="button-add" id="add" value="+" onClick={onNumberClick} className="defaultButton" />);
-		} else if (i === 9) {
-			numberButtons.push(<Button key="button-equal" id="equals" value="=" onClick={onEval} className="verticalButton" />);
-		}
-	}
-
 	return (
 		<div className="calculator">
 			<CalcScreen value={resolve} className="result" />
@@ -139,8 +133,20 @@ const Calculator = () => {
 				<Button id="clear" value="AC" onClick={onClear} className="horizontalButton" />
 				<Button id="divide" value="/" onClick={onNumberClick} className="defaultButton" />
 				<Button id="multiply" value="X" onClick={onNumberClick} className="defaultButton" />
-				{numberButtons}
+				<Button id="seven" value="7" onClick={onNumberClick} className="defaultButton" />
+				<Button id="eight" value="8" onClick={onNumberClick} className="defaultButton" />
+				<Button id="nine" value="9" onClick={onNumberClick} className="defaultButton" />
+				<Button id="subtract" value="-" onClick={onNumberClick} className="defaultButton" />
+				<Button id="six" value="6" onClick={onNumberClick} className="defaultButton" />
+				<Button id="five" value="5" onClick={onNumberClick} className="defaultButton" />
+				<Button id="four" value="4" onClick={onNumberClick} className="defaultButton" />
+				<Button id="add" value="+" onClick={onNumberClick} className="defaultButton" />
+				<Button id="one" value="1" onClick={onNumberClick} className="defaultButton" />
+				<Button id="two" value="2" onClick={onNumberClick} className="defaultButton" />
+				<Button id="three" value="3" onClick={onNumberClick} className="defaultButton" />
+				<Button id="zero" value="0" onClick={onNumberClick} className="horizontalButton" />
 				<Button id="decimal" value="." onClick={onNumberClick} className="defaultButton" />
+				<Button id="equals" value="=" onClick={onEval} className="verticalButton" />
 			</div>
 		</div>
 	);

@@ -1,6 +1,6 @@
 # Front End Development Libraries Projects
 
-## Project: Build a Markdown Previewer
+## Project: Build a JavaScript Calculator
 
 ### Important:
 
